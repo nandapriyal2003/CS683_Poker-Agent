@@ -111,7 +111,7 @@ class MCTSPokerPlayer(BasePokerPlayer):
       Optional JSON with keys: action_bias (fold/call/raise floats), seed (int).
   """
 
-  def __init__(self, time_budget: float = 0.38, config_path: str | None = None):
+  def __init__(self, time_budget: float = 0.38, config_path: str | None = None, iterations: int = None):
     super().__init__()
     self.time_budget = time_budget
     base = os.path.dirname(os.path.abspath(__file__))

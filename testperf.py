@@ -109,8 +109,8 @@ if __name__ == '__main__':
     name1, agent1_name, name2, agent2_name, it1, it2 = parse_arguments()
     
     # Prepare parameters for MCTS agents
-    params1 = {'iterations': it1} if agent1_name == "MCTSPokerPlayer" else {}
-    params2 = {'iterations': it2} if agent2_name == "MCTSPokerPlayer" else {}
+    params1 = {'time_budget': 0.38, 'iterations': it1} if agent1_name == "MCTSPokerPlayer" else {}
+    params2 = {'time_budget': 0.38, 'iterations': it2} if agent2_name == "MCTSPokerPlayer" else {}
     
     start = time.time()
     testperf(name1, agent1_name, name2, agent2_name, params1, params2)
