@@ -103,7 +103,10 @@ def timeout2(seconds=None, defaultretval="Blah",exception_message="[EXP]: Action
         if not seconds:
             return function
 
-        
+        # Unix-only (signal.SIGALRM / setitimer); not available on Windows
+        if not hasattr(signal, "SIGALRM"):
+            return function
+
         def handler(signum, frame):
             _raise_exception(timeout_exception, exception_message)
             #print("[EXP] : TimedOut, Returning Default Value (Fold)")
