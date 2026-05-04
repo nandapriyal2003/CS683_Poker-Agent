@@ -71,15 +71,15 @@ class GameState:
 
     def terminal_utility(self, perspective=0):
         if self.folded_player == perspective:
-            return -self.pot
+            return -self.pot / 2
         if self.folded_player == 1 - perspective:
-            return self.pot
+            return self.pot / 2
 
-        my_eq = np.clip(EQUITY_MAP[self.hand_bkt[perspective]] + np.random.normal(0, 0.03), 0, 1)
-        opp_eq = np.clip(EQUITY_MAP[self.hand_bkt[1-perspective]] + np.random.normal(0, 0.03), 0, 1)
+        my_eq = EQUITY_MAP[self.hand_bkt[perspective]]
+        opp_eq = EQUITY_MAP[self.hand_bkt[1-perspective]]
 
         win_prob = my_eq / (my_eq + opp_eq + 1e-6)
-        return (2 * win_prob - 1) * self.pot
+        return (2 * win_prob - 1) * (self.pot / 2)
 
 infosets = {}
 
@@ -157,7 +157,7 @@ def _apply_action(state, action_idx):
         return GameState(state.street_idx, state.hand_bkt, new_pb,
                          state.raise_count + 1, pot, stacks[0], stacks[1], next_p)
 
-def train(iterations=100000):
+def train(iterations=200000):
     print(f"Running CFR+ for {iterations} iterations...")
 
     for i in range(iterations):
@@ -180,7 +180,7 @@ def train(iterations=100000):
         for node in infosets.values():
             node.update()
 
-        if (i + 1) % 20000 == 0:
+        if (i + 1) % 40000 == 0:
             print(f"Iteration {i + 1}/{iterations} — {len(infosets)} infosets")
 
     strategy_table = {}
@@ -205,4 +205,4 @@ def train(iterations=100000):
     return strategy_table
 
 if __name__ == "__main__":
-    train(iterations=100000)
+    train(iterations=200000)
